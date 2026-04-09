@@ -1,0 +1,151 @@
+services:
+  # --- NÚCLEO ---
+  broker:
+    image: italloguimaraes/broker-dc:latest
+    container_name: broker-central
+    ports:
+      - "9000:9000"
+      - "9001:9001/udp"
+    stdin_open: true
+    tty: true
+
+  # --- SENSORES (Perfil: campo) ---
+  sensor_temp_rack1:
+    image: italloguimaraes/sensor-dc:latest
+    container_name: sensor-temp-rack1
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9001
+      - SENSOR_ID=TEMP_RACK_01
+      - SENSOR_TYPE=TEMPERATURA
+      - SENSOR_UNIT=°C
+    network_mode: host
+
+  sensor_temp_rack2:
+    image: italloguimaraes/sensor-dc:latest
+    container_name: sensor-temp-rack2
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9001
+      - SENSOR_ID=TEMP_RACK_02
+      - SENSOR_TYPE=TEMPERATURA
+      - SENSOR_UNIT=°C
+    network_mode: host
+
+  sensor_umidade_sala:
+    image: italloguimaraes/sensor-dc:latest
+    container_name: sensor-umid-sala
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9001
+      - SENSOR_ID=UMID_SALA_COFRE
+      - SENSOR_TYPE=UMIDADE
+      - SENSOR_UNIT=%
+    network_mode: host
+
+  sensor_energia_gerador:
+    image: italloguimaraes/sensor-dc:latest
+    container_name: sensor-power-gen
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9001
+      - SENSOR_ID=PWR_GERADOR_01
+      - SENSOR_TYPE=ENERGIA
+      - SENSOR_UNIT=kW
+    network_mode: host
+
+  sensor_energia_ups:
+    image: italloguimaraes/sensor-dc:latest
+    container_name: sensor-power-ups
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9001
+      - SENSOR_ID=PWR_NOBREAK_MAIN
+      - SENSOR_TYPE=ENERGIA
+      - SENSOR_UNIT=kW
+    network_mode: host
+
+  # --- ATUADORES (Perfil: campo) ---
+  resfriamento_principal:
+    image: italloguimaraes/actuator-dc:latest
+    container_name: ac-principal
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9000
+      - ACTUATOR_ID=AC_ZONA_NORTE
+    network_mode: host
+
+  resfriamento_reserva:
+    image: italloguimaraes/actuator-dc:latest
+    container_name: ac-reserva
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9000
+      - ACTUATOR_ID=AC_ZONA_SUL
+    network_mode: host
+
+  extintor_gas:
+    image: italloguimaraes/actuator-dc:latest
+    container_name: extintor-co2
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9000
+      - ACTUATOR_ID=EXTINTOR_CO2_SALA
+    network_mode: host
+
+  iluminacao_emergencia:
+    image: italloguimaraes/actuator-dc:latest
+    container_name: luz-emergencia
+    profiles: ["campo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9000
+      - ACTUATOR_ID=LUZ_EMERGENCIA_01
+    network_mode: host
+
+  # --- CLIENTES (Perfil: interativo) ---
+  cliente_ti:
+    image: italloguimaraes/client-dc:latest
+    container_name: gestor-ti
+    profiles: ["interativo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9000
+    network_mode: host
+
+  cliente_infra:
+    image: italloguimaraes/client-dc:latest
+    container_name: gestor-infra
+    profiles: ["interativo"]
+    stdin_open: true
+    tty: true
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9000
+    network_mode: host
+
+  # --- TESTES DE CARGA ---
+  bot_estresse:
+    image: italloguimaraes/bot-dc:latest
+    container_name: bot-ataque
+    profiles: ["teste"]
+    environment:
+      - BROKER_ADDR=${IP_BROKER}:9000
+    network_mode: host
