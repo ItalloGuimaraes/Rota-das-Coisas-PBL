@@ -219,7 +219,7 @@ Todo o sistema é executado em containers Docker, garantindo:
 
 ### 1. Configuração
 
-Defina o IP da máquina onde o Broker será executado:
+No .env defina o IP da máquina, onde o Broker será executado:
 
 ```env
 IP_BROKER=172.16.201.11
@@ -238,7 +238,7 @@ docker compose up -d broker
 ### 3. Subir Dispositivos (Sensores e Atuadores)
 
 ```bash
-docker compose up -d [Nome do Container]
+docker compose up -d (Nome do Container)
 ```
 
 ---
@@ -254,7 +254,7 @@ docker compose --profile teste up -d
 ### 5. Cliente Interativo
 
 ```bash
-docker compose --profile interativo run --rm cliente_ti
+docker compose run --rm cliente_ti
 ```
 
 ---
