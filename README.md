@@ -297,9 +297,6 @@ Estudante de Engenharia de Computação - UEFS
 * 🌐 Modelo TCP/IP (conceitos de rede)
   [https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/](https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/)
 
-* 📡 Comunicação via Sockets (TCP/UDP)
-  [https://www.geeksforgeeks.org/socket-programming-in-go/](https://www.geeksforgeeks.org/socket-programming-in-go/)
-
 ---
 
 ## 📄 Licença
